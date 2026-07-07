@@ -644,9 +644,9 @@ function selectPlan(name){
   if(select){ select.value = name; }
 }
 
-// form submit via Formspree AJAX
+// form submit via Formspree AJAX — mostra mensagem própria, sem redirecionar
 const form = document.getElementById('contact-form');
-const msg = document.getElementById('form-msg');
+const formCard = document.querySelector('.form-card');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const btn = form.querySelector('.form-submit');
@@ -659,9 +659,23 @@ form.addEventListener('submit', async (e) => {
       headers: { 'Accept': 'application/json' }
     });
     if (res.ok) {
-      msg.style.display = 'block';
-      form.reset();
-      btn.textContent = 'Enviado ✓';
+      // esconde o form e mostra mensagem personalizada
+      form.style.display = 'none';
+      formCard.innerHTML = `
+        <div style="padding:20px 0;text-align:center;">
+          <svg width="48" height="48" viewBox="0 0 48 48" style="margin:0 auto 24px;display:block;">
+            <circle cx="24" cy="24" r="22" fill="none" stroke="#8FAD4C" stroke-width="1.5"/>
+            <path d="M14 24 L21 31 L34 17" stroke="#8FAD4C" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;color:#4A2436;margin-bottom:16px;line-height:1.2;">Mensagem recebida!</h3>
+          <p style="font-size:1rem;color:#8A4A61;line-height:1.7;max-width:340px;margin:0 auto 12px;">
+            Obrigada pelo seu contato. Em breve entrarei em contato com você pelo WhatsApp para conversarmos melhor.
+          </p>
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.1rem;color:#D56989;margin-top:24px;">
+            — Theisy Souza
+          </p>
+        </div>
+      `;
     } else {
       btn.textContent = 'Erro — tente novamente';
       btn.disabled = false;
